@@ -13,6 +13,25 @@ class SS_Shortcode
     }
 
     /**
+     * create custom table
+     * @return void
+     */
+    public static function install()
+    {
+        global $wpdb;
+
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE IF NOT EXISTS ". $wpdb->prefix ."ss_form ( `id` BIGINT(20) NOT NULL PRIMARY KEY AUTO_INCREMENT , `name` INT(200) NOT NULL , `email` VARCHAR(100) NOT NULL , `message` LONGTEXT NOT NULL )" . $charset_collate;
+
+        if (!function_exists('dbDelta')) {
+            require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        }
+
+        dbDelta($sql);
+
+    }
+
+    /**
      * load html form
      * @param  array  $attr
      * @return string
@@ -74,5 +93,5 @@ class SS_Shortcode
         }
     }
 }
-
 new SS_Shortcode();
+register_activation_hook( __FILE__, ['SS_Shortcode', 'install']);
