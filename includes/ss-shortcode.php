@@ -32,20 +32,25 @@ class SS_Shortcode
 
     }
 
-    public function get_messages($limit = 10)
+    public function get_messages($limit = 0)
     {
         global $wpdb;
 
-        return $wpdb->get_results(sprintf("SELECT * FROM %s LIMIT %s", $wpdb->prefix.'ss_form', $limit), ARRAY_A);
+        return $wpdb->get_results(sprintf("SELECT * FROM %s %s", $wpdb->prefix.'ss_form', (int) $limit ? 'LIMIT '. (int)$limit : ''), ARRAY_A);
     }
 
+    /**
+     * show list of messages
+     * @param  array  $attr
+     * @return string
+     */
     public function form_list($attr=[])
     {
         $attr = shortcode_atts([
-            'limit' => 10
+            'limit' => 0
         ], $attr);
 
-        $messages = $this->get_messages();
+        $messages = $this->get_messages($attr['limit']);
         ob_start();
         require_once (SS_DIR .'/views/form-list.php');
         return ob_get_clean();
