@@ -21,7 +21,7 @@ class SS_Shortcode
         global $wpdb;
 
         $charset_collate = $wpdb->get_charset_collate();
-        $sql = "CREATE TABLE IF NOT EXISTS ". $wpdb->prefix ."ss_form ( `id` BIGINT(20) NOT NULL PRIMARY KEY AUTO_INCREMENT , `name` INT(200) NOT NULL , `email` VARCHAR(100) NOT NULL , `message` LONGTEXT NOT NULL )" . $charset_collate;
+        $sql = "CREATE TABLE IF NOT EXISTS ". $wpdb->prefix ."ss_form ( `id` BIGINT(20) NOT NULL PRIMARY KEY AUTO_INCREMENT , `name` VARCHAR(200) NOT NULL , `email` VARCHAR(100) NOT NULL , `message` LONGTEXT NOT NULL )" . $charset_collate;
 
         if (!function_exists('dbDelta')) {
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -90,6 +90,18 @@ class SS_Shortcode
                     echo sprintf('<div class="ss-form-error-message">%s</div>', $message);
                 }
             }
+
+            global $wpdb;
+            // insert to table
+            $wpdb->insert($wpdb->prefix.'ss_form', [
+                'name' => $name,
+                'email' => $email,
+                'message' => $message
+            ], [
+                '%s',
+                '%s',
+                '%s'
+            ]);
         }
     }
 }
