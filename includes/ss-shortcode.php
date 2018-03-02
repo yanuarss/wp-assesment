@@ -8,6 +8,7 @@ class SS_Shortcode
 
     function __construct()
     {
+        add_shortcode('ss_form_list', [$this, 'form_list']);
         add_shortcode('ss_form', [$this, 'form']);
         add_action('ss_form_handle_form', [$this, 'handle_form']);
     }
@@ -29,6 +30,25 @@ class SS_Shortcode
 
         dbDelta($sql);
 
+    }
+
+    public function get_messages($limit = 10)
+    {
+        global $wpdb;
+
+        return $wpdb->get_results(sprintf("SELECT * FROM %s LIMIT %s", $wpdb->prefix.'ss_form', $limit), ARRAY_A);
+    }
+
+    public function form_list($attr=[])
+    {
+        $attr = shortcode_atts([
+            'limit' => 10
+        ], $attr);
+
+        $messages = $this->get_messages();
+        ob_start();
+        require_once (SS_DIR .'/views/form-list.php');
+        return ob_get_clean();
     }
 
     /**
