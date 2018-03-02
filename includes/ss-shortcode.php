@@ -96,6 +96,8 @@ class SS_Shortcode
 
         // save form
         do_action('ss_form_handle_form');
+        wp_enqueue_script('jquery-validate', SS_URI.'assets/js/jquery.validate.min.js', ['jquery']);
+        wp_enqueue_script('ss_form', SS_URI.'assets/js/ss-form.js', ['jquery']);
         ob_start();
         require_once (SS_DIR .'/views/form.php');
         return ob_get_clean();
