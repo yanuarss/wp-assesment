@@ -10,6 +10,9 @@ class SS_Shortcode
     {
         add_shortcode('ss_form_list', [$this, 'form_list']);
         add_shortcode('ss_form', [$this, 'form']);
+
+        add_action('admin_menu', [$this, 'admin_menu']);
+
         add_action('ss_form_handle_form', [$this, 'handle_form']);
     }
 
@@ -37,6 +40,32 @@ class SS_Shortcode
         global $wpdb;
 
         return $wpdb->get_results(sprintf("SELECT * FROM %s %s", $wpdb->prefix.'ss_form', (int) $limit ? 'LIMIT '. (int)$limit : ''), ARRAY_A);
+    }
+
+    /**
+     * Register admin page
+     *
+     */
+    function admin_menu()
+    {
+        add_menu_page(
+                'Form Entries', 'SS Form', 'manage_options', 'ss-form-list', [$this, 'admin_page_contact'], '', 6
+        );
+    }
+
+    /**
+     * Output Admin
+     *
+     */
+    function admin_page_contact()
+    {
+        echo '<div class="wrap">';
+        echo '<h3>Form Entries</h3>';
+        require 'ss-form-table.php';
+        $wp_table = new SS_Form_Table();
+        $wp_table->prepare_items(); // prepare item
+        $wp_table->display(); // display table
+        echo '</div>';
     }
 
     /**
