@@ -149,7 +149,7 @@ class SS_Shortcode
 
             global $wpdb;
             // insert to table
-            $wpdb->insert($wpdb->prefix.'ss_form', [
+            $insert = $wpdb->insert($wpdb->prefix.'ss_form', [
                 'name' => $name,
                 'email' => $email,
                 'message' => $message
@@ -158,6 +158,12 @@ class SS_Shortcode
                 '%s',
                 '%s'
             ]);
+
+            if ($insert) {
+                wp_mail(get_bloginfo('admin_email'), 'You have message from '.$name, $message, [
+                    'Reply-To: '.$name.'<'.$email.'>'
+                ]);
+            }
         }
     }
 }
