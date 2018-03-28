@@ -81,7 +81,7 @@ class SS_Shortcode
 
         $messages = $this->get_messages($attr['limit']);
         ob_start();
-        require_once (SS_DIR .'/views/form-list.php');
+        require (SS_DIR .'/views/form-list.php');
         return ob_get_clean();
     }
 
@@ -99,7 +99,7 @@ class SS_Shortcode
         wp_enqueue_script('jquery-validate', SS_URI.'assets/js/jquery.validate.min.js', ['jquery']);
         wp_enqueue_script('ss_form', SS_URI.'assets/js/ss-form.js', ['jquery']);
         ob_start();
-        require_once (SS_DIR .'/views/form.php');
+        require (SS_DIR .'/views/form.php');
         return ob_get_clean();
     }
 
