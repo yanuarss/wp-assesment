@@ -10,6 +10,7 @@
 
 require_once __DIR__ . '/includes/ss-shortcode.php';
 
+// fire action when plugin activated
 register_activation_hook( __FILE__, function() {
     do_action('ss_form_plugin_activated');
 });

@@ -7,9 +7,9 @@ class SS_Form_Table extends WP_List_Table {
 	public $per_page = 20;
 
 	/**
-	 * Get Brochures
+	 * Get data
 	 *
-	 * @return array $brochures, variable which store brochures data to display in table
+	 * @return array $results variable which store brochures data to display in table
 	 * @author Yanuar
 	 */
 	function get_data() {
@@ -22,6 +22,10 @@ class SS_Form_Table extends WP_List_Table {
 		return $results;
 	}
 
+	/**
+	 * get total data
+	 * @return [type] [description]
+	 */
 	public function get_total()
 	{
 		global $wpdb;
