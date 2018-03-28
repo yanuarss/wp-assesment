@@ -9,3 +9,7 @@
  defined('SS_URI') || define('SS_URI', plugin_dir_url(__FILE__));
 
 require_once __DIR__ . '/includes/ss-shortcode.php';
+
+register_activation_hook( __FILE__, function() {
+    do_action('ss_form_plugin_activated');
+});

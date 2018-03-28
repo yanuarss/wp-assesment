@@ -8,19 +8,24 @@ class SS_Shortcode
 
     function __construct()
     {
+        // register shortcode
         add_shortcode('ss_form_list', [$this, 'form_list']);
         add_shortcode('ss_form', [$this, 'form']);
 
+        // handle admin menu
         add_action('admin_menu', [$this, 'admin_menu']);
 
+        // handle form input
         add_action('ss_form_handle_form', [$this, 'handle_form']);
+
+        add_action('ss_form_plugin_activated', [$this, 'install']);
     }
 
     /**
      * create custom table
      * @return void
      */
-    public static function install()
+    public function install()
     {
         global $wpdb;
 
@@ -35,6 +40,11 @@ class SS_Shortcode
 
     }
 
+    /**
+     * get messages from custom table
+     * @param  integer $limit
+     * @return array
+     */
     public function get_messages($limit = 0)
     {
         global $wpdb;
@@ -48,19 +58,21 @@ class SS_Shortcode
      */
     function admin_menu()
     {
+        // handle admin menu
         add_menu_page(
                 'Form Entries', 'SS Form', 'manage_options', 'ss-form-list', [$this, 'admin_page_contact'], '', 6
         );
     }
 
     /**
-     * Output Admin
+     * Output Admin menu
      *
      */
     function admin_page_contact()
     {
         echo '<div class="wrap">';
         echo '<h3>Form Entries</h3>';
+        // use wp list table
         require 'ss-form-table.php';
         $wp_table = new SS_Form_Table();
         $wp_table->prepare_items(); // prepare item
@@ -159,6 +171,7 @@ class SS_Shortcode
                 '%s'
             ]);
 
+            // email to admin
             if ($insert) {
                 wp_mail(get_bloginfo('admin_email'), 'You have message from '.$name, $message, [
                     'Reply-To: '.$name.'<'.$email.'>'
@@ -168,4 +181,3 @@ class SS_Shortcode
     }
 }
 new SS_Shortcode();
-register_activation_hook( __FILE__, ['SS_Shortcode', 'install']);
